@@ -4,6 +4,7 @@ import com.example.diplom_2.LoginUser;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +36,6 @@ public class CreateOrderTest {
                     .body("success", equalTo(true))
                     .and()
                     .statusCode(SC_OK);
-        executeDelete(token);
     }
 
     @Test
@@ -51,7 +51,6 @@ public class CreateOrderTest {
                 .body("success", equalTo(true))
                 .and()
                 .statusCode(SC_OK);
-
     }
     @Test
     @DisplayName("Создание заказа с авторизацией и без ингредиентов")
@@ -67,7 +66,6 @@ public class CreateOrderTest {
                 .body("message", equalTo("Ingredient ids must be provided"))
                 .and()
                 .statusCode(SC_BAD_REQUEST);
-        executeDelete(token);
     }
 
     @Test
@@ -93,7 +91,6 @@ public class CreateOrderTest {
         Response response = executeMakeOrder(createOrder);
         response.then().assertThat()
                 .statusCode(SC_INTERNAL_SERVER_ERROR);
-        executeDelete(token);
     }
 
     @Test
@@ -103,5 +100,9 @@ public class CreateOrderTest {
         Response response = executeMakeOrder(createOrder);
         response.then().assertThat()
                 .statusCode(SC_INTERNAL_SERVER_ERROR);
+    }
+    @After
+    public void deleteChanges() {
+        executeDelete(token);
     }
 }

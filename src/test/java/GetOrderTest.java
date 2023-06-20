@@ -4,6 +4,7 @@ import com.example.diplom_2.LoginUser;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +41,6 @@ public class GetOrderTest {
                 .body("orders", notNullValue())
                 .and()
                 .statusCode(SC_OK);
-        executeDelete(token);
     }
 
     @Test
@@ -53,5 +53,10 @@ public class GetOrderTest {
                 .body("message", equalTo("You should be authorised"))
                 .and()
                 .statusCode(SC_UNAUTHORIZED);
+    }
+
+    @AfterClass
+    public static void deleteChanges() {
+        executeDelete(token);
     }
 }
